@@ -1,0 +1,18 @@
+# 忽略 Python 編譯暫存檔
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 忽略各種影像檔
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.tif
+*.webp
+*.svg
+
+*.pth

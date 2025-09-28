@@ -1,0 +1,19 @@
+data:
+  clean_dir: "data/clean"
+  trad_dir: "data/trad"
+  image_size: 256
+
+train:
+  batch_size: 8
+  lr: 0.0001
+  epochs: 100
+  save_every: 5
+  save_path: "ckpt_nobi"
+
+
+infer:
+  input_dir: "result/origin"
+  output_dir: "result/fixed_1"
+  ckpt: "ckpt/checkpoint_epoch100.pth"
+  keep_original_size: true
+  keep_trad_suffix: false
