@@ -14,6 +14,6 @@ train:
 infer:
   input_dir: "result/origin"
   output_dir: "result/fixed_1"
-  ckpt: "ckpt/checkpoint_epoch100.pth"
+  ckpt: "ckpt_nobi/checkpoint_epoch100.pth"
   keep_original_size: true
   keep_trad_suffix: false
