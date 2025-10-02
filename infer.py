@@ -1,3 +1,4 @@
+"""This file is the inference script for the UNet model."""
 import re
 from pathlib import Path
 
@@ -9,23 +10,19 @@ import yaml
 
 from model import UNet
 
-
 def build_transform():
     return T.Compose([
         T.ToTensor()
     ])
 
-
 def to_pil(t):
     t = t.clamp(0, 1).cpu()
     return T.ToPILImage()(t)
-
 
 def out_name(fname: str, keep_trad_suffix: bool) -> str:
     if keep_trad_suffix:
         return fname
     return re.sub(r"_trad(?=\.)", "", fname)
-
 
 @torch.no_grad()
 def main():
@@ -51,27 +48,27 @@ def main():
 
     transform = build_transform()
 
-    # 處理 input_dir 裡所有影像檔
+    # Capture all images in the input directory
     for input_image in sorted(input_dir.iterdir()):
         if not input_image.suffix.lower() in [".jpg", ".jpeg", ".png", ".bmp"]:
             continue
 
         img = Image.open(input_image).convert("RGB")
 
-        # 轉 tensor
+        # Convert to tensor
         x = transform(img).unsqueeze(0).to(device)
         h, w = x.shape[2], x.shape[3]
 
-        # --- 自動 pad ---
+        # Padding
         pad_h = (4 - h % 4) % 4
         pad_w = (4 - w % 4) % 4
         if pad_h > 0 or pad_w > 0:
             x = F.pad(x, (0, pad_w, 0, pad_h))
 
-        # --- 推論 ---
+        # Inference
         pred = model(x)
 
-        # --- 裁掉 pad ---
+        # Remove padding
         if pad_h > 0 or pad_w > 0:
             pred = pred[:, :, :h, :w]
 
@@ -80,7 +77,6 @@ def main():
         out_filename = out_name(input_image.name, keep_trad_suffix)
         pred_img.save(output_dir / out_filename)
         print(f"Saved result to {output_dir/out_filename}")
-
 
 if __name__ == "__main__":
     main()

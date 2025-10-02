@@ -10,7 +10,6 @@ train:
   save_every: 5
   save_path: "ckpt_nobi"
 
-
 infer:
   input_dir: "result/origin"
   output_dir: "result/fixed_1"

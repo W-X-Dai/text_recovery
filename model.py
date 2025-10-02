@@ -1,3 +1,4 @@
+"""This file defines the UNet model architecture."""
 import torch
 import torch.nn as nn
 

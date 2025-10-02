@@ -1,3 +1,9 @@
+"""
+This script generates synthetic images with random text.
+1. Generate clean images <- We are here
+2. Add noise to the clean images
+3. Apply traditional image processing to noisy images
+"""
 import os
 import random
 import string
@@ -9,10 +15,10 @@ def random_text(min_len=10, max_len=50):
     return ''.join(random.choices(string.ascii_letters + " ", k=length))
 
 def draw_bold_text(draw, position, text, font, fill=0, bold=False):
-    """在指定位置繪製文字，支援隨機粗體"""
+    """Randomly draw bold text by drawing multiple times with slight offsets."""
     x, y = position
     if bold:
-        # 模擬粗體，四個方向偏移
+        # Draw text multiple times with slight offsets to simulate boldness
         offsets = [(0, 0), (1, 0), (0, 1), (1, 1)]
         for ox, oy in offsets:
             draw.text((x + ox, y + oy), text, font=font, fill=fill)
@@ -30,12 +36,12 @@ def generate_images(
     for i in range(n_images):
         if i % 100 == 0:
             print(f"Generating image {i}/{n_images}")
-        img = Image.new("L", img_size, 255)  # 白底
+        img = Image.new("L", img_size, 255)  # White background
         draw = ImageDraw.Draw(img)
         font_size = random.randint(20, 40)
         font = ImageFont.truetype(font_path, font_size)
 
-        # 多行隨機文字
+        # Multi-line random text
         y = 20
         for _ in range(random.randint(5, 12)):
             line = random_text()

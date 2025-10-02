@@ -1,3 +1,4 @@
+"""This file is the main training script for the UNet model."""
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -13,7 +14,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 
-# --- Loss 定義 ---
+# Loss functions
 criterion_l1 = nn.L1Loss()
 criterion_ssim = pytorch_msssim.SSIM(data_range=1.0, size_average=True, channel=3)
 
@@ -35,8 +36,9 @@ def edge_loss(pred, target):
     return F.l1_loss(sobel_filter(pred), sobel_filter(target))
 
 def combined_loss(pred, target):
+    """Combine L1, SSIM, and edge loss."""
     l1 = criterion_l1(pred, target)
-    ssim = 1 - criterion_ssim(pred, target)  # SSIM 越大越好
+    ssim = 1 - criterion_ssim(pred, target)  # maximize SSIM
     edge = edge_loss(pred, target)
     return l1 + 0.5*ssim + 0.5*edge
 
@@ -68,7 +70,6 @@ def train(config):
         model.train()
         epoch_loss = 0
 
-        # tqdm 包裝 DataLoader
         pbar = tqdm(loader, desc=f"Epoch {epoch+1}/{config['train']['epochs']}", leave=False)
         for trad, clean in pbar:
             trad, clean = trad.to(device), clean.to(device)
@@ -88,11 +89,10 @@ def train(config):
         scheduler.step(avg_loss)
 
         if (epoch + 1) % config["train"]["save_every"] == 0:
-            # 儲存權重
             ckpt_path = save_path / f"checkpoint_epoch{epoch+1}.pth"
             torch.save(model.state_dict(), ckpt_path)
 
-            # 隨機取 10 組樣本
+            # Save 10 sample images
             model.eval()
             with torch.no_grad():
                 idxs = random.sample(range(len(dataset)), 10)
