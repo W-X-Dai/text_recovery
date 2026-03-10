@@ -4,15 +4,11 @@ __pycache__/
 *.pyo
 *.pyd
 
-# 忽略各種影像檔
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.bmp
-*.tiff
-*.tif
-*.webp
-*.svg
+
 
 *.pth
+
+result/
+ckpt_bi/
+ckpt_nobi/
+data/

@@ -167,6 +167,12 @@ The model generates restored images with:
 
 Results are saved in the specified output directory with optional filename suffix handling.
 
+Following is the original input image:
+![Original Image](img/original.png)
+
+And here is the restored output image:
+![Restored Image](img/result.png)
+
 ## 🤝 Contributing
 
 1. Fork the repository
